@@ -6,7 +6,14 @@ do
 done
 
 $APP_HOME/bin/client waitForReady -r 12 -d 10
-$APP_HOME/bin/client admin:configure /opt/ddfConfig.json -r 12 -d 10
+
+if [ -n "$CONFIG_PATH" ]; then
+  echo "Installing with config file"
+  $APP_HOME/bin/client admin:install $CONFIG_PATH -r 12 -d 10
+else
+  echo "Installing with HA profile"
+  $APP_HOME/bin/client "admin:install -ha" -r 12 -d 10
+fi
 
 if [ -n "$INSTALL_FEATURES" ]; then
   if [[ $INSTALL_FEATURES == *";"* ]]; then
